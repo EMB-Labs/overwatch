@@ -25,7 +25,7 @@
 
 
 
-### 1️⃣ Orange Pi NPU 서버 
+### Orange Pi NPU 서버 
 
 ```bash
 cd npu_server/
@@ -55,7 +55,7 @@ GROWTH_FACTOR = 1.5                   # 확산 판단 배율
 ALERT_COOLDOWN = 30                   # 알림 간격 (초)
 ```
 
-## 🔧 트러블슈팅
+## 트러블슈팅
 
 ### RTSP 연결 실패
 ```bash
