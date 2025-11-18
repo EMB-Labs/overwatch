@@ -1,0 +1,64 @@
+name: Overwatch
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+
+
+environment:
+  sdk: ^3.5.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_naver_map: ^1.4.1
+  geolocator: ^10.1.0
+  permission_handler: ^11.0.1
+  shared_preferences: ^2.2.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "web/icons/fire_icon.png"
+  
+
+flutter:
+  uses-material-design: true
+  assets:
+    - web/icons/fire_icon.png
+    - web/icons/false_alarm_1.png
+    - web/icons/false_alarm_2.png
+    - web/icons/false_alarm_3.png
+    - web/icons/initial_fire_1_evacuate.png
+    - web/icons/initial_fire_1_suppress.png
+    - web/icons/initial_fire_2_evacuate.png
+    - web/icons/initial_fire_2_suppress.png
+    - web/icons/initial_fire_3_evacuate.png
+    - web/icons/initial_fire_3_suppress.png
+    - web/icons/false_alarm_manager_1.png
+    - web/icons/false_alarm_manager_2.png
+    - web/icons/false_alarm_manager_3.png
+    - web/icons/initial_fire_Manager_1_evacuate.png
+    - web/icons/initial_fire_Manager_1_suppress.png
+    - web/icons/initial_fire_Manager_2_evacuate.png
+    - web/icons/initial_fire_Manager_2_suppress.png
+    - web/icons/initial_fire_Manager_3_evacuate.png
+    - web/icons/initial_fire_Manager_3_suppress.png
+    - web/icons/initial_fire_Firefighter_1.png
+    - web/icons/initial_fire_Firefighter_2.png
+    - web/icons/initial_fire_Firefighter_3.png
+    - web/icons/floor_1_plan.png
+    - web/icons/floor_2_plan.png
+    - web/icons/floor_3_plan.png
+    - web/icons/kakao.jpg
+    - web/icons/dog.jpg
+    - web/icons/firefighter.png
+    - web/icons/manager.png
+    - web/icons/fire_extinguisher.png
+    - web/icons/exit.png
