@@ -18,15 +18,15 @@ from scenario_baseline import build_agents as baseline_build_agents
 # 위험 회피 + 약간의 혼잡 가중
 DEFAULT_ASTAR_CFG = AStarConfig(
     name="with_risk",
-    length_weight=1.0,
-    congestion_weight=8.0,
-    risk_weight=8.0,
+    length_weight=4.0,
+    congestion_weight=1.0,
+    risk_weight=1.0,
 )
 
 # 20초 이상 정체 or 혼잡도 커지면 재라우트
 DEFAULT_REROUTE_POLICY = {
     "max_stuck_time": 20.0,
-    "congestion_threshold": 12,
+    "congestion_threshold": 30,
 }
 
 
@@ -286,3 +286,4 @@ SCENARIO_MAP = {
     "s11": SCENARIO_S11,
     "s12": SCENARIO_S12,
 }
+
