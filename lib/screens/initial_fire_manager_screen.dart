@@ -105,160 +105,259 @@ class _InitialFireManagerScreenState extends State<InitialFireManagerScreen>
     });
   }
 
+  Widget _buildInfoItem(String text) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 3),
+      child: Text(
+        text,
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 9,
+          fontWeight: FontWeight.w600,
+          height: 1.3,
+        ),
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: Color(0xFF1A1A2E),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Row(
-              children: [
-                // 왼쪽 사이드바
-                Container(
-                  width: screenSize.width * 0.10,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: _currentStep == 3
-                          ? [
-                              Color(0xFF4CAF50),
-                              Color(0xFF66BB6A),
-                            ]
-                          : [
-                              Color(0xFFEF5350),
-                              Color(0xFFE57373),
-                            ],
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: [
+          // 메인 콘텐츠 영역
+          Positioned(
+            left: screenSize.width * 0.15,
+            top: 60,
+            width: screenSize.width * 0.85,
+            height: screenSize.height - 60,
+            child: Container(
+              color: Color(0xFFF5F5F5),
+              child: _buildContent(),
+            ),
+          ),
+          // 좌측: 노란색 사이드바 배경
+          Positioned(
+            left: 0,
+            top: 60,
+            bottom: 0,
+            width: screenSize.width * 0.15,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.yellow[600],
+              ),
+            ),
+          ),
+          // 좌측: 사이드바 콘텐츠
+          Positioned(
+            left: 28,
+            top: 60,
+            bottom: 0,
+            width: screenSize.width * 0.13,
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+              child: Column(
+                children: [
+                  // 상단 여백
+                  SizedBox(height: 10),
+                  // 중앙 배치를 위한 Spacer
+                  Spacer(),
+                  // 소화기 사용법 박스
+                  Container(
+                    height: 230,
+                    child: Container(
+                      padding: EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: Colors.yellow[100],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '소화기 사용법',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(height: 8),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 3),
+                            child: RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.w600,
+                                  height: 1.3,
+                                ),
+                                children: [
+                                  TextSpan(text: "1. 소화기를 바닥에 내려두고, 손잡이의 "),
+                                  TextSpan(
+                                    text: "안전핀",
+                                    style: TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  TextSpan(text: "을 뽑는다"),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 4),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 3),
+                            child: RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.w600,
+                                  height: 1.3,
+                                ),
+                                children: [
+                                  TextSpan(text: "2. 한손은 "),
+                                  TextSpan(
+                                    text: "손잡이",
+                                    style: TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  TextSpan(text: ", 다른한손은 "),
+                                  TextSpan(
+                                    text: "호스",
+                                    style: TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  TextSpan(text: "를 잡는다"),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 4),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 3),
+                            child: RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.w600,
+                                  height: 1.3,
+                                ),
+                                children: [
+                                  TextSpan(text: "3. "),
+                                  TextSpan(
+                                    text: "손잡이",
+                                    style: TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  TextSpan(text: "를 힘껏 누르고 빗자루로 쓸듯이 방사한다"),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  child: _buildLeftSidebar(),
-                ),
-                // 메인 콘텐츠 영역
-                Expanded(
-                  child: Container(
-                    color: Color(0xFFF5F5F5),
-                    child: _buildContent(),
+                  // 중앙 배치를 위한 Spacer
+                  Spacer(),
+                  // 카메라 버튼 (뒤로가기)
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.5),
+                        shape: BoxShape.circle,
+                      ),
+                      child: IconButton(
+                        icon: Icon(Icons.arrow_back_ios,
+                            color: Colors.white, size: 18),
+                        onPressed: () => Navigator.pop(context),
+                        padding: EdgeInsets.zero,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                ],
+              ),
+            ),
+          ),
+          // 상단 헤더
+          Positioned(
+            top: 0,
+            left: 0,
+            width: screenSize.width,
+            height: 60,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Color(0xFFFF7043),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    blurRadius: 8,
+                    offset: Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Center(
+                child: Text(
+                  '화재 초기 - 1F',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 2,
+                    shadows: [
+                      Shadow(
+                        color: Colors.black.withOpacity(0.4),
+                        blurRadius: 4,
+                        offset: Offset(2, 2),
+                      ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
-            // 진압 확인 알림
-            if (_showSuppressionNotification)
-              Positioned(
-                top: 16,
-                left: screenSize.width * 0.10 + 40,
-                right: 245,
+          ),
+          // 진압 확인 알림
+          if (_showSuppressionNotification)
+            Positioned(
+              left: screenSize.width * 0.15 + 25,
+              top: 70,
+              child: Container(
+                width: screenSize.width * 0.6,
                 child: _buildSuppressionNotification(),
               ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLeftSidebar() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: 20),
-            onPressed: () => Navigator.pop(context),
-          ),
-          Expanded(
-            child: Center(
-              child: _buildLeftSidebarContent(),
             ),
-          ),
-          SizedBox(height: 16),
         ],
       ),
     );
   }
 
-  Widget _buildLeftSidebarContent() {
-    if (_currentStep == 1 || _currentStep == 2) {
-      return Container(
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Image.asset(
-              'web/icons/fire_extinguisher.png',
-              width: 36,
-              height: 36,
-              errorBuilder: (context, error, stackTrace) {
-                return Icon(
-                  Icons.fire_extinguisher,
-                  color: Colors.white,
-                  size: 36,
-                );
-              },
-            ),
-            SizedBox(height: 16),
-            Text(
-              '초기 진압',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.8,
-                height: 1.3,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      );
-    } else {
-      return Container(
-        padding: EdgeInsets.symmetric(horizontal: 6, vertical: 16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Image.asset(
-              'web/icons/exit.png',
-              width: 36,
-              height: 36,
-              errorBuilder: (context, error, stackTrace) {
-                return Icon(
-                  Icons.exit_to_app,
-                  color: Colors.white,
-                  size: 36,
-                );
-              },
-            ),
-            SizedBox(height: 16),
-            Text(
-              '신속 대피',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.8,
-                height: 1.3,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      );
-    }
-  }
-
   Widget _buildContent() {
-    return FadeTransition(
-      opacity: _fadeAnimation,
-      child: switch (_currentStep) {
-        1 => _buildStep1(),
-        2 => _buildStep2(),
-        3 => _buildStep3(),
-        _ => _buildStep1(),
-      },
+    return AnimatedSwitcher(
+      duration: Duration(milliseconds: 500),
+      child: _currentStep == 1
+          ? _buildStep1()
+          : _currentStep == 2
+              ? _buildStep2()
+              : _buildStep3(),
     );
   }
 

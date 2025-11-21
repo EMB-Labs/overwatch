@@ -3,6 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+// ===== Material 3 스타일 컬러 팔레트 =====
+const kPrimaryColor = Color(0xFFE3F2FD);
+const kPrimaryLightColor = Color(0xFFBBDEFB); // 살짝 밝은 남보라
+const kSecondaryColor = Color(0xFF7CB342); // 진한 연두색 대피 경로
+const kSecondaryLight = Color(0xFFFFCC80);
+const kErrorColor = Color(0xFFD32F2F); // 진짜 긴급/위험
+
 // 대피 화면 - 사용자용
 // 층별 평면도에 대피 경로를 표시하고, 화재 위치를 아이콘으로 표시
 // 우측에 미니맵으로 전체 대피 경로를 표시 (3층 → 2층 → 1층 → 출구)
@@ -336,10 +343,27 @@ class _EvacuationUserScreenState extends State<EvacuationUserScreen> {
             ),
           ],
         ),
-        backgroundColor: Colors.red,
+        backgroundColor: kErrorColor,
         duration: Duration(seconds: 3),
         behavior: SnackBarBehavior.floating,
         margin: EdgeInsets.all(16),
+      ),
+    );
+  }
+
+  // 왼쪽 사이드바 항목 빌더
+  Widget _buildInfoItem(String text) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 3),
+      child: Text(
+        text,
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 9,
+          fontWeight: FontWeight.w600,
+          height: 1.3,
+        ),
+        textAlign: TextAlign.center,
       ),
     );
   }
@@ -351,7 +375,7 @@ class _EvacuationUserScreenState extends State<EvacuationUserScreen> {
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.95),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.purple.shade300, width: 2),
+        border: Border.all(color: kPrimaryLightColor, width: 2),
         boxShadow: [
           BoxShadow(
             color: Colors.black26,
@@ -455,9 +479,9 @@ class _EvacuationUserScreenState extends State<EvacuationUserScreen> {
     return Container(
       padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.orange.shade50.withOpacity(0.98),
+        color: Colors.yellow[300],
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.orange, width: 2.5),
+        border: Border.all(color: Colors.red, width: 2.5),
         boxShadow: [
           BoxShadow(
             color: Colors.black26,
@@ -472,7 +496,8 @@ class _EvacuationUserScreenState extends State<EvacuationUserScreen> {
         children: [
           Row(
             children: [
-              Icon(Icons.warning_amber_rounded, size: 24, color: Colors.orange),
+              Icon(Icons.warning_amber_rounded,
+                  size: 24, color: Colors.red),
               SizedBox(width: 6),
               Expanded(
                 child: Text(
@@ -480,7 +505,7 @@ class _EvacuationUserScreenState extends State<EvacuationUserScreen> {
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
-                    color: Colors.orange.shade900,
+                    color: Colors.red,
                   ),
                 ),
               ),
@@ -506,8 +531,6 @@ class _EvacuationUserScreenState extends State<EvacuationUserScreen> {
       ),
       child: Row(
         children: [
-          Icon(Icons.circle, size: 5, color: Colors.orange),
-          SizedBox(width: 8),
           Expanded(
             child: highlight != null
                 ? RichText(
@@ -546,12 +569,14 @@ class _EvacuationUserScreenState extends State<EvacuationUserScreen> {
 
   // 미터 좌표를 화면 픽셀 좌표로 변환
   Offset? _meterToPixel(double meterX, double meterY, Size screenSize) {
+    double headerHeight = 60;
     double leftMargin = screenSize.width * 0.15;
     double mapWidth = screenSize.width * 0.70;
+    double mapHeight = screenSize.height - headerHeight;
 
     double pixelX = leftMargin + (meterX / kWorldWidthM) * mapWidth;
     double pixelY =
-        screenSize.height - (meterY / kWorldHeightM) * screenSize.height;
+        headerHeight + mapHeight - (meterY / kWorldHeightM) * mapHeight;
     return Offset(pixelX, pixelY);
   }
 
@@ -717,9 +742,9 @@ class _EvacuationUserScreenState extends State<EvacuationUserScreen> {
           // 중앙: 층별 평면도 (70% 너비)
           Positioned(
             left: screenSize.width * 0.15,
-            top: 0,
+            top: 60,
             width: screenSize.width * 0.70,
-            height: screenSize.height,
+            height: screenSize.height - 60,
             child: Image.asset(
               'web/icons/floor_${floorNumber}_plan.png',
               fit: BoxFit.fill,
@@ -749,123 +774,145 @@ class _EvacuationUserScreenState extends State<EvacuationUserScreen> {
           // 화재 위치 아이콘 (현재 층인 경우만 표시)
           if (fireLocation != null && fireFloorNumber == floorNumber)
             _buildFireLocationIcon(screenSize),
-          // 좌측: 빨간색 사이드바 배경
+          // 좌측: 파랑 사이드바 배경
           Positioned(
             left: 0,
-            top: 0,
+            top: 60,
             bottom: 0,
             width: screenSize.width * 0.15,
             child: Container(
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Color(0xFFEF5350),
-                    Color(0xFFE57373),
-                  ],
-                ),
+                color: Colors.yellow[600],
               ),
             ),
           ),
-          // 좌측: 사이드바 콘텐츠 (화재 발생, 즉시 대피, 뒤로가기)
+          // 좌측: 사이드바 콘텐츠
           Positioned(
-            left: 60,
-            top: 0,
+            left: 28,
+            top: 60,
             bottom: 0,
-            width: screenSize.width * 0.15 - 60,
+            width: screenSize.width * 0.13,
             child: Container(
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 8),
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(height: 20),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(9),
-                          decoration: BoxDecoration(
-                            color: Colors.orange.shade700,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black26,
-                                blurRadius: 8,
-                                offset: Offset(0, 4),
+                  // 상단 여백
+                  SizedBox(height: 10),
+                  // 중앙 배치를 위한 Spacer
+                  Spacer(),
+                  // 화재 발생 시
+                  Container(
+                    height: 230,
+                    child: Container(
+                      padding: EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: Colors.yellow[100],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '화재시 대피방법',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(height: 8),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 3),
+                            child: RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.w600,
+                                  height: 1.3,
+                                ),
+                                children: [
+                                  TextSpan(text: "1. "),
+                                  TextSpan(
+                                    text: "'불이야'",
+                                    style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                                  ),
+                                  TextSpan(text: " 라고 크게\n외친다."),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
-                          child: Icon(Icons.local_fire_department,
-                              color: Colors.white, size: 28),
-                        ),
-                        SizedBox(height: 10),
-                        Text(
-                          '화재\n발생',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.2,
-                            height: 1.15,
-                            shadows: [
-                              Shadow(
-                                color: Colors.black26,
-                                blurRadius: 4,
-                                offset: Offset(2, 2),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 3),
+                            child: RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.w600,
+                                  height: 1.3,
+                                ),
+                                children: [
+                                  TextSpan(text: "2. "),
+                                  TextSpan(
+                                    text: "발신기",
+                                    style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                                  ),
+                                  TextSpan(text: "(비상벨)을\n누른다."),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(height: 18),
-                        Container(
-                          padding: EdgeInsets.all(7),
-                          decoration: BoxDecoration(
-                            color: Colors.yellow.shade700,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black26,
-                                blurRadius: 8,
-                                offset: Offset(0, 4),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 3),
+                            child: RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.w600,
+                                  height: 1.3,
+                                ),
+                                children: [
+                                  TextSpan(text: "3. 오른쪽 "),
+                                  TextSpan(
+                                    text: "피난안내도",
+                                    style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                                  ),
+                                  TextSpan(text: "에 있는\n피난동선에 따라 신속대피한다."),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
-                          child: Icon(Icons.warning_amber_rounded,
-                              color: Colors.white, size: 22),
-                        ),
-                        SizedBox(height: 10),
-                        Text(
-                          '즉시\n대피하세요',
-                          style: TextStyle(
-                            color: Colors.yellow.shade100,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.0,
-                            height: 1.15,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
+                  // 중앙 배치를 위한 Spacer
+                  Spacer(),
+                  // 뒤로가기 (작게)
                   Container(
+                    height: 40,
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.25),
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(8),
                       border: Border.all(
-                          color: Colors.white.withOpacity(0.5), width: 2),
+                          color: Colors.white.withOpacity(0.5), width: 1.5),
                     ),
                     child: IconButton(
                       icon: Icon(Icons.arrow_back_ios,
-                          color: Colors.white, size: 26),
+                          color: Colors.white, size: 18),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
+                      padding: EdgeInsets.zero,
                     ),
                   ),
+                  SizedBox(height: 10),
                 ],
               ),
             ),
@@ -874,7 +921,7 @@ class _EvacuationUserScreenState extends State<EvacuationUserScreen> {
           if (pathNodes != null && pathNodes!.isNotEmpty)
             Positioned(
               right: screenSize.width * 0.01,
-              top: 20,
+              top: 80,
               bottom: 20,
               child: Container(
                 width: screenSize.width * 0.13,
@@ -882,7 +929,7 @@ class _EvacuationUserScreenState extends State<EvacuationUserScreen> {
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.95),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.red, width: 2.5),
+                  border: Border.all(color: kPrimaryColor, width: 2.5),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black26,
@@ -932,46 +979,60 @@ class _EvacuationUserScreenState extends State<EvacuationUserScreen> {
                 ),
               ),
             ),
+          // 상단 헤더 (전체 너비)
+          Positioned(
+            top: 0,
+            left: 0,
+            width: screenSize.width,
+            height: 60,
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [
+                    Colors.orange[900]!, // 매우 진한 오렌지
+                    Colors.orange[400]!, // 밝은 오렌지
+                  ],
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    blurRadius: 8,
+                    offset: Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Center(
+                child: Text(
+                  '화재 대피 안내도 - ${floorNumber}F',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 2,
+                    shadows: [
+                      Shadow(
+                        color: Colors.black.withOpacity(0.4),
+                        blurRadius: 4,
+                        offset: Offset(2, 2),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
           // 화재 진압 성공/실패 알림
           if (_alertState != 'hidden')
             Positioned(
               left: screenSize.width * 0.15 + 25,
-              top: 20,
+              top: 70,
               child: Container(
                 width: screenSize.width * 0.42,
                 child: _alertState == 'question'
                     ? _buildQuestionAlert()
                     : _buildWarningAlert(),
-              ),
-            ),
-          // 층수 표시 (2층, 3층만)
-          if (floorNumber >= 2)
-            Positioned(
-              right: screenSize.width * 0.15 + 30,
-              top: 30,
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.95),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.red.shade400, width: 3),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 8,
-                      offset: Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Text(
-                  '${floorNumber}F',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red.shade700,
-                    letterSpacing: 2,
-                  ),
-                ),
               ),
             ),
         ],
@@ -980,7 +1041,7 @@ class _EvacuationUserScreenState extends State<EvacuationUserScreen> {
   }
 }
 
-// 대피 경로 그리기 Painter (현재 층의 경로를 빨간 선으로 표시)
+// 대피 경로 그리기 Painter (현재 층의 경로를 주황 선으로 표시)
 class EvacuationPathPainter extends CustomPainter {
   final List<String> path;
   final Offset? Function(String) getCoordinate;
@@ -1013,10 +1074,10 @@ class EvacuationPathPainter extends CustomPainter {
     double scaleX = mapWidth / kFloorPlanWidth;
     double scaleY = screenSize.height / kFloorPlanHeight;
 
-    // 경로 선 그리기
+    // 경로 선 그리기 (주황색으로 변경)
     Paint pathPaint = Paint()
-      ..color = Colors.red.withOpacity(0.9)
-      ..strokeWidth = 8 * scaleX
+      ..color = kSecondaryColor.withOpacity(0.95)
+      ..strokeWidth = 20 * scaleX
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round;
@@ -1047,21 +1108,21 @@ class EvacuationPathPainter extends CustomPainter {
     }
     canvas.drawPath(pathLine, pathPaint);
 
-    // 시작점 (초록색 원)
+    // 시작점 (진한 연두색 원)
     Paint startPaint = Paint()
-      ..color = Colors.green
+      ..color = kSecondaryColor
       ..style = PaintingStyle.fill;
-    canvas.drawCircle(coords[0], 12 * scaleX, startPaint);
+    canvas.drawCircle(coords[0], 28 * scaleX, startPaint);
 
-    // 종료점 (빨간색 원)
+    // 종료점 (주황 원 - 경로의 끝, 출구 느낌)
     Paint endPaint = Paint()
-      ..color = Colors.red
+      ..color = kSecondaryColor
       ..style = PaintingStyle.fill;
-    canvas.drawCircle(coords[coords.length - 1], 12 * scaleX, endPaint);
+    canvas.drawCircle(coords[coords.length - 1], 28 * scaleX, endPaint);
 
-    // 중간 노드 (작은 빨간색 점)
+    // 중간 노드 (연한 주황 점)
     Paint nodePaint = Paint()
-      ..color = Colors.red.withOpacity(0.5)
+      ..color = kSecondaryColor.withOpacity(0.5)
       ..style = PaintingStyle.fill;
     for (int i = 1; i < coords.length - 1; i++) {
       canvas.drawCircle(coords[i], 4 * scaleX, nodePaint);
@@ -1141,24 +1202,24 @@ class OverallPathPainter extends CustomPainter {
 
     // 3층 레이블 및 경로
     _drawFloorLabel(canvas, '3F', centerX - 50, floor3Y,
-        startFloor == 'F3' ? Colors.red : Colors.grey);
+        startFloor == 'F3' ? kSecondaryColor : Colors.grey);
     if (startFloor == 'F3' && floor3Nodes.isNotEmpty) {
       _drawFloorPathWithLine(
-          canvas, floor3Nodes.length, pathX, floor3Y, Colors.red);
+          canvas, floor3Nodes.length, pathX, floor3Y, kSecondaryColor);
     }
 
     // 2층 레이블 및 경로
     _drawFloorLabel(canvas, '2F', centerX - 50, floor2Y,
-        startFloor == 'F2' ? Colors.red : Colors.grey);
+        startFloor == 'F2' ? kSecondaryColor : Colors.grey);
     if (startFloor == 'F2' && floor2Nodes.isNotEmpty) {
       _drawFloorPathWithLine(
-          canvas, floor2Nodes.length, pathX, floor2Y, Colors.red);
+          canvas, floor2Nodes.length, pathX, floor2Y, kSecondaryColor);
     }
 
     // 3층 → 2층 계단 연결선 (파란색)
     if (floor3Nodes.isNotEmpty && floor2Nodes.isNotEmpty) {
       Paint linePaint = Paint()
-        ..color = Colors.blue
+        ..color = kPrimaryColor
         ..strokeWidth = 2.5
         ..style = PaintingStyle.stroke;
       canvas.drawLine(
@@ -1170,12 +1231,12 @@ class OverallPathPainter extends CustomPainter {
 
     // 1층 레이블
     _drawFloorLabel(canvas, '1F', centerX - 50, floor1Y,
-        startFloor == 'F1' ? Colors.red : Colors.grey);
+        startFloor == 'F1' ? kSecondaryColor : Colors.grey);
 
     // 2층 → 1층 계단 연결선 (파란색)
     if (floor2Nodes.isNotEmpty && floor1Nodes.isNotEmpty) {
       Paint linePaint = Paint()
-        ..color = Colors.blue
+        ..color = kPrimaryColor
         ..strokeWidth = 2.5
         ..style = PaintingStyle.stroke;
       canvas.drawLine(
@@ -1252,8 +1313,8 @@ class OverallPathPainter extends CustomPainter {
 
         lastRedX = exitOnRight ? exitX - finalSpacing : exitX + finalSpacing;
 
-        _drawFloorPathCustom(
-            canvas, floorNodes.length, startX, exitY, Colors.red, exitOnRight);
+        _drawFloorPathCustom(canvas, floorNodes.length, startX, exitY,
+            kSecondaryColor, exitOnRight);
       }
 
       // 마지막 빨간 점 → 초록 점 연결선

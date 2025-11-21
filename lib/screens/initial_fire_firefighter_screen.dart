@@ -52,90 +52,229 @@ class _InitialFireFirefighterScreenState
     super.dispose();
   }
 
+  Widget _buildInfoItem(String text) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 3),
+      child: Text(
+        text,
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 9,
+          fontWeight: FontWeight.w600,
+          height: 1.3,
+        ),
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: Color(0xFF1A1A2E),
-      body: SafeArea(
-        child: Row(
-          children: [
-            // 왼쪽 사이드바
-            Container(
-              width: screenSize.width * 0.10,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Color(0xFFFF6B6B),
-                    Color(0xFFFF8A80),
-                  ],
-                ),
-              ),
-              child: _buildLeftSidebar(),
-            ),
-            // 메인 콘텐츠 영역
-            Expanded(
-              child: Container(
-                color: Color(0xFFF5F5F5),
-                child: _buildContent(),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLeftSidebar() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      backgroundColor: Colors.white,
+      body: Stack(
         children: [
-          IconButton(
-            icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: 20),
-            onPressed: () => Navigator.pop(context),
+          // 메인 콘텐츠 영역
+          Positioned(
+            left: screenSize.width * 0.15,
+            top: 60,
+            width: screenSize.width * 0.85,
+            height: screenSize.height - 60,
+            child: Container(
+              color: Color(0xFFF5F5F5),
+              child: _buildContent(),
+            ),
           ),
-          Expanded(
-            child: Center(
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 20),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Image.asset(
-                      'web/icons/fire_icon.png',
-                      width: 36,
-                      height: 36,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Icon(
-                          Icons.local_fire_department,
-                          color: Colors.white,
-                          size: 36,
-                        );
-                      },
-                    ),
-                    SizedBox(height: 16),
-                    Text(
-                      '화재 진압',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.8,
-                        height: 1.3,
+          // 좌측: 노란색 사이드바 배경
+          Positioned(
+            left: 0,
+            top: 60,
+            bottom: 0,
+            width: screenSize.width * 0.15,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.yellow[600],
+              ),
+            ),
+          ),
+          // 좌측: 사이드바 콘텐츠
+          Positioned(
+            left: 28,
+            top: 60,
+            bottom: 0,
+            width: screenSize.width * 0.13,
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+              child: Column(
+                children: [
+                  // 상단 여백
+                  SizedBox(height: 10),
+                  // 중앙 배치를 위한 Spacer
+                  Spacer(),
+                  // 소방관 안내 박스
+                  Container(
+                    height: 230,
+                    child: Container(
+                      padding: EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: Colors.yellow[100],
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      textAlign: TextAlign.center,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '화재 진압 안내',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(height: 8),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 3),
+                            child: RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.w600,
+                                  height: 1.3,
+                                ),
+                                children: [
+                                  TextSpan(text: "1. "),
+                                  TextSpan(
+                                    text: "안내도",
+                                    style: TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  TextSpan(text: " 확인"),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 4),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 3),
+                            child: RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.w600,
+                                  height: 1.3,
+                                ),
+                                children: [
+                                  TextSpan(text: "2. 안내도에 있는 "),
+                                  TextSpan(
+                                    text: "빨간색 선",
+                                    style: TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  TextSpan(text: "을 따라"),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 4),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 3),
+                            child: RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.w600,
+                                  height: 1.3,
+                                ),
+                                children: [
+                                  TextSpan(text: "3. 화재를 "),
+                                  TextSpan(
+                                    text: "진압",
+                                    style: TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  TextSpan(text: "해주세요!"),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
+                  ),
+                  // 중앙 배치를 위한 Spacer
+                  Spacer(),
+                  // 카메라 버튼 (뒤로가기)
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.5),
+                        shape: BoxShape.circle,
+                      ),
+                      child: IconButton(
+                        icon: Icon(Icons.arrow_back_ios,
+                            color: Colors.white, size: 18),
+                        onPressed: () => Navigator.pop(context),
+                        padding: EdgeInsets.zero,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                ],
+              ),
+            ),
+          ),
+          // 상단 헤더
+          Positioned(
+            top: 0,
+            left: 0,
+            width: screenSize.width,
+            height: 60,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Color(0xFFFF7043),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    blurRadius: 8,
+                    offset: Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Center(
+                child: Text(
+                  '화재 초기 - 1F',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 2,
+                    shadows: [
+                      Shadow(
+                        color: Colors.black.withOpacity(0.4),
+                        blurRadius: 4,
+                        offset: Offset(2, 2),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-          SizedBox(height: 16),
         ],
       ),
     );
