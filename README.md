@@ -86,3 +86,27 @@ tail -f raspberry_pi/preprocess.log
 tail -f npu_server/npu_server.log
 tail -f npu_server/fire_alerts.log
 ```
+
+
+### Flutter 기반 화재 대피 안내 앱 구조
+```
+├── lib/
+│   ├── screens/                      # 상황별 UI 화면
+│   │   ├── role_selection_screen.dart          # 역할 선택 화면
+│   │   ├── lockscreen_notification_screen.dart # 신호 수신 후 상황 안내
+│   │   ├── splash_screen.dart                 # 지도 로딩 화면
+│   │   ├── map_screen.dart                    # 층별 안내도 & 대피 경로 표시
+│   │   ├── evacuation_dashboard.dart          # 관리자 전체 대피 현황
+│   │   ├── evacuation_user_screen.dart        # 사용자 대피 안내 화면
+│   │   ├── false_alarm_manager_screen.dart    # 관리자 오경보 처리
+│   │   ├── false_alarm_user_screen.dart       # 사용자 오경보 안내
+│   │   ├── initial_fire_firefighter_screen.dart # 소방관 초기 화재 대응
+│   │   ├── initial_fire_manager_screen.dart   # 관리자 초기 화재 대응
+│   │   └── initial_fire_user_screen.dart      # 사용자 초기 화재 안내
+│   │
+│   ├── services/
+│   │   └── fire_data_service.dart     # Raspberry Pi → NPU → 앱으로 신호 전달 처리
+│   │
+│   ├── widgets/                       # 공통 UI 위젯
+│   └── main.dart                      # 앱 진입점
+```
