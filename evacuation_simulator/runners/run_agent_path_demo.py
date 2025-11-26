@@ -4,15 +4,16 @@
 # - 전역 통계(Exit별, 완료시간, 리라우트 통계)
 # - reroute_attempts (시도) / reroute_history (실제 변경)
 # - 출구 통계: (1) assigned_exit 기준, (2) 실제 사용된 exit 기준 둘 다 출력
-
-from astar_logic import load_building
-from scenario_fire_pack import (
+import sys
+sys.path.append("..")  # 부모 디렉토리를 PYTHONPATH에 추가
+from core.astar_logic import load_building
+from scenarios.scenario_fire_pack import (
     DEFAULT_ASTAR_CFG,
     DEFAULT_REROUTE_POLICY,
     build_agents_with_floor_split,
 )
-from simulation_engine import build_node_dynamics, simulate, compute_stats
-import scenario_fire_pack
+from core.simulation_engine import build_node_dynamics, simulate, compute_stats
+import scenarios.scenario_fire_pack 
 
 
 def get_agent_paths_with_history(
@@ -74,7 +75,7 @@ def get_agent_paths_with_history(
 
     # 2) 층별 인원 설정 (기본: 각 층 300명)
     if per_floor is None:
-        per_floor = {fl: 300 for fl in floors}
+        per_floor = {fl: 900 for fl in floors}
 
     # 3) 에이전트 생성
     agents = build_agents_with_floor_split(
@@ -96,8 +97,8 @@ def get_agent_paths_with_history(
         dynamic_hook = None
         scenario_id = "baseline"
     else:
-        if hasattr(scenario_fire_pack, scenario_name):
-            dynamic_hook = getattr(scenario_fire_pack, scenario_name)
+        if hasattr(scenarios.scenario_fire_pack, scenario_name):
+            dynamic_hook = getattr(scenarios.scenario_fire_pack, scenario_name)
             scenario_id = scenario_name
         else:
             raise ValueError(f"Scenario '{scenario_name}' not found in scenario_fire_pack.")
@@ -277,7 +278,7 @@ def get_agent_paths_with_history(
 def run_demo_full(
     scenario_name: str,
     agent_index: int = 0,
-    building_path: str = "mockup_building_with_edges.json",
+    building_path: str = "../config/mockup_building_with_edges.json",
     per_floor=None,
     max_steps: int = 2000,
     dt: float = 1.0,

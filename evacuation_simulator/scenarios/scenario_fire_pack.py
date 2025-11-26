@@ -2,13 +2,15 @@
 # - 화재 + block + 혼잡도 급증 시나리오 12개
 # - 화재 노드는 closed, 주변 노드는 risk 증가
 # - 각 시나리오에 기본 A* / ReroutePolicy 내장
-
 from __future__ import annotations
 from typing import List, Dict
 from types import SimpleNamespace
 
-from astar_logic import AStarConfig
-from scenario_baseline import build_agents as baseline_build_agents
+import sys
+sys.path.append("..")  # 부모 디렉토리를 PYTHONPATH에 추가
+
+from core.astar_logic import AStarConfig
+from .scenario_baseline import build_agents as baseline_build_agents
 
 
 # =========================================================

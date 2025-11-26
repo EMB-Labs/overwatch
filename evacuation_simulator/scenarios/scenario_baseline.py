@@ -4,7 +4,9 @@ import random
 from collections import defaultdict
 from typing import List, Dict, Optional
 
-from astar_logic import AStarConfig, build_graph, astar_path
+import sys
+sys.path.append("..")  # 부모 디렉토리를 PYTHONPATH에 추가
+from core.astar_logic import AStarConfig, build_graph, astar_path
 
 
 SCENARIO_ID = "baseline_F1_F2_F3_uniform"

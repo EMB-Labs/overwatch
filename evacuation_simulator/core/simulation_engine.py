@@ -21,7 +21,7 @@ import numpy as np
 
 # 재라우팅 관련 (옵션)
 # 재라우팅 관련 (옵션)
-from astar_logic import (
+from .astar_logic import (
     AStarConfig,
     apply_rerouting_for_nodes,
 )
