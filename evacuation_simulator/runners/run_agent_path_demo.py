@@ -5,7 +5,13 @@
 # - reroute_attempts (시도) / reroute_history (실제 변경)
 # - 출구 통계: (1) assigned_exit 기준, (2) 실제 사용된 exit 기준 둘 다 출력
 import sys
-sys.path.append("..")  # 부모 디렉토리를 PYTHONPATH에 추가
+import os
+
+# 현재 파일(run_agent_path_demo.py)의 디렉토리(runners)의 부모 디렉토리(evacuation_simulator)를 sys.path에 추가
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
+
 from core.astar_logic import load_building
 from scenarios.scenario_fire_pack import (
     DEFAULT_ASTAR_CFG,
