@@ -202,11 +202,11 @@ def dyn_s11_congestion_spike_stair1(building, step, agents, node_dynamics):
 # 12) 시나리오12: 혼잡도 급증 – EXIT_B throughput 급락 → 리라우트 유도
 def dyn_s12_congestion_spike_exitB(building, step, agents, node_dynamics):
     if step == 40:
-        for target_id in ["F1_EXIT_B", "F2_EXIT_B", "F3_EXIT_B"]:
-            dyn = node_dynamics.get(target_id)
-            if dyn:
-                dyn["service_rate_ps"] *= 0.2
-        print("[Congestion] EXIT_B service_rate dropped to 20%")
+        target_id = "F2_EXIT_B"
+        dyn = node_dynamics.get(target_id)
+        if dyn:
+            dyn["service_rate_ps"] *= 0.2
+            print("[Congestion] EXIT_B service_rate dropped to 20%")
 
 
 # =========================================================
@@ -288,4 +288,5 @@ SCENARIO_MAP = {
     "s11": SCENARIO_S11,
     "s12": SCENARIO_S12,
 }
+
 
